@@ -1,28 +1,28 @@
 <template>
     <div class="join" v-if="props.limit != undefined && props.offset != undefined">
         <template v-if="currentPage - 1 > 0">
-            <button @click="toPage(currentPage - 1)" class="join-item btn  btn-sm">Предыдущий</button>
+            <button @click="toPage(currentPage - 1)" class="join-item btn  ">Предыдущий</button>
         </template>
         <template v-if="currentPage != 1 && (pages[0] ?? 0) != 1">
-            <button class="join-item btn btn-sm" @click="toPage(1)">1</button>
+            <button class="join-item btn " @click="toPage(1)">1</button>
         </template>
         <template v-if="(pages[0] ?? 0) > 2">
-            <button class="join-item btn btn-sm disabled">...</button>
+            <button class="join-item btn  disabled">...</button>
         </template>
         <template v-for="page in pages" :key="page">
-            <button @click="toPage(page)" :class="{ ['btn-active']: page == currentPage }"
-                class="join-item btn btn-sm">{{ page }}</button>
+            <button @click="toPage(page)" :class="{ ['btn-active']: page == currentPage }" class="join-item btn ">{{
+                page }}</button>
         </template>
         <template v-if="(pages[pages.length - 1] ?? 0) < latestPage - 1">
-            <button class="join-item btn btn-sm disabled">...</button>
+            <button class="join-item btn  disabled">...</button>
         </template>
         <template v-if="(pages[pages.length - 1] ?? 0) < latestPage">
-            <button class="join-item btn btn-sm" @click="toPage(latestPage)">{{ latestPage }}</button>
+            <button class="join-item btn " @click="toPage(latestPage)">{{ latestPage }}</button>
         </template>
         <template v-if="currentPage + 1 <= latestPage">
             <button @click="() => {
                 toPage(currentPage + 1)
-            }" class="join-item btn  btn-sm">Следующий</button>
+            }" class="join-item btn  ">Следующий</button>
         </template>
     </div>
 </template>
