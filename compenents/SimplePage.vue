@@ -1,0 +1,107 @@
+<template>
+    <div class="join" v-if="props.limit != undefined && props.offset != undefined">
+        <template v-if="currentPage - 1 > 0">
+            <button @click="toPage(currentPage - 1)" class="join-item btn  btn-sm">Предыдущий</button>
+        </template>
+        <template v-if="currentPage != 1 && (pages[0] ?? 0) != 1">
+            <button class="join-item btn btn-sm" @click="toPage(1)">1</button>
+        </template>
+        <template v-if="(pages[0] ?? 0) > 2">
+            <button class="join-item btn btn-sm disabled">...</button>
+        </template>
+        <template v-for="page in pages" :key="page">
+            <button @click="toPage(page)" :class="{ ['btn-active']: page == currentPage }"
+                class="join-item btn btn-sm">{{ page }}</button>
+        </template>
+        <template v-if="(pages[pages.length - 1] ?? 0) < latestPage - 1">
+            <button class="join-item btn btn-sm disabled">...</button>
+        </template>
+        <template v-if="(pages[pages.length - 1] ?? 0) < latestPage">
+            <button class="join-item btn btn-sm" @click="toPage(latestPage)">{{ latestPage }}</button>
+        </template>
+        <template v-if="currentPage + 1 <= latestPage">
+            <button @click="() => {
+                toPage(currentPage + 1)
+            }" class="join-item btn  btn-sm">Следующий</button>
+        </template>
+    </div>
+</template>
+<script lang="ts" setup>
+import { computed } from 'vue'
+
+const props = defineProps<{
+    limit?: number
+    offset?: number
+    count?: number
+    requestUrl?: string
+}>()
+
+const emit = defineEmits<{
+    (e: 'toPage', limit?: number, offset?: number): void,
+    (e: 'toRequestUrl', requestUrl: string): void,
+}>()
+
+const maxItems = 2
+
+const currentPage = computed(() => {
+    if (props.limit == undefined || props.offset == undefined) {
+        return 1
+    }
+
+    if (props.offset == 0) {
+        return 1
+    }
+
+    return (props.offset / props.limit) + 1
+})
+
+const latestPage = computed(() => {
+    if (props.limit == undefined || props.offset == undefined) {
+        return 0
+    }
+    return Math.ceil((props.count ?? 0) / props.limit)
+})
+
+const pages = computed(() => {
+    const leftPages: number[] = []
+    for (let i = 0; i < maxItems; i++) {
+        const p = currentPage.value - (i + 1)
+        if (p <= 0) {
+            continue
+        }
+        leftPages.unshift(p)
+    }
+
+    const rigthPages: number[] = []
+    for (let i = 0; i < maxItems; i++) {
+        const p = currentPage.value + (i + 1)
+        if (p > latestPage.value) {
+            continue
+        }
+        rigthPages.push(p)
+    }
+
+    return [...leftPages, currentPage.value, ...rigthPages]
+})
+
+const toPage = (page: number) => {
+    if (props.limit == undefined || props.offset == undefined) {
+        return
+    }
+    let offset = 0
+    offset = page * props.limit - props.limit
+    emit('toPage', props.limit, offset)
+    if (props.requestUrl !== undefined && props.requestUrl !== "") {
+        console.log(props.requestUrl)
+        const url = new URL(props.requestUrl);
+        const params = url.searchParams;
+        params.set("limit", props.limit.toString())
+        params.set("offset", offset.toString())
+        emit('toRequestUrl', url.toString())
+    } else if (props.requestUrl === "") {
+        emit('toRequestUrl', "/")
+        console.log("toPage 2")
+    }
+}
+
+</script>
