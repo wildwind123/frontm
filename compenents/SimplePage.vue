@@ -1,29 +1,34 @@
 <template>
-    <div class="join" v-if="props.limit != undefined && props.offset != undefined">
-        <template v-if="currentPage - 1 > 0">
-            <button @click="toPage(currentPage - 1)" class="join-item btn  ">Предыдущий</button>
-        </template>
-        <template v-if="currentPage != 1 && (pages[0] ?? 0) != 1">
-            <button class="join-item btn " @click="toPage(1)">1</button>
-        </template>
-        <template v-if="(pages[0] ?? 0) > 2">
-            <button class="join-item btn  disabled">...</button>
-        </template>
-        <template v-for="page in pages" :key="page">
-            <button @click="toPage(page)" :class="{ ['btn-active']: page == currentPage }" class="join-item btn ">{{
-                page }}</button>
-        </template>
-        <template v-if="(pages[pages.length - 1] ?? 0) < latestPage - 1">
-            <button class="join-item btn  disabled">...</button>
-        </template>
-        <template v-if="(pages[pages.length - 1] ?? 0) < latestPage">
-            <button class="join-item btn " @click="toPage(latestPage)">{{ latestPage }}</button>
-        </template>
-        <template v-if="currentPage + 1 <= latestPage">
-            <button @click="() => {
+    <div v-if="props.limit != undefined && props.offset != undefined">
+        <div class="join flex  justify-center flex-wrap mb-4">
+            <template v-if="currentPage != 1 && (pages[0] ?? 0) != 1">
+                <button class="join-item btn " @click="toPage(1)">1</button>
+            </template>
+            <template v-if="(pages[0] ?? 0) > 2">
+                <button class="join-item btn  disabled">...</button>
+            </template>
+            <template v-for="page in pages" :key="page">
+                <button @click="toPage(page)" :class="{ ['btn-active']: page == currentPage }" class="join-item btn ">{{
+                    page }}</button>
+            </template>
+            <template v-if="(pages[pages.length - 1] ?? 0) < latestPage - 1">
+                <button class="join-item btn  disabled">...</button>
+            </template>
+            <template v-if="(pages[pages.length - 1] ?? 0) < latestPage">
+                <button class="join-item btn " @click="toPage(latestPage)">{{ latestPage }}</button>
+            </template>
+
+        </div>
+        <div class="flex  justify-center">
+            <template v-if="currentPage - 1 > 0">
+
+            </template>
+            <button :class="{ ['btn-disabled']: currentPage - 1 <= 0 }" @click="toPage(currentPage - 1)"
+                class="join-item btn  ">Предыдущий</button>
+            <button :class="{ ['btn-disabled']: currentPage + 1 > latestPage }" @click="() => {
                 toPage(currentPage + 1)
             }" class="join-item btn  ">Следующий</button>
-        </template>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
