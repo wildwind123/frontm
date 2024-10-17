@@ -1,7 +1,12 @@
 <template>
   <div class="w-full relative">
     <label class="input input-bordered flex items-center gap-2">
-      <input type="text" class="grow" placeholder="Search" />
+      <input
+        @input="emit('input', ($event.target as HTMLInputElement).value)"
+        type="text"
+        class="grow"
+        placeholder="Search"
+      />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
@@ -27,10 +32,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { type TAutoComplete } from '#src/frontm/input/input.ts'
+import { type TAutoComplete } from '#src/frontm/input/index.ts'
 
 const props = defineProps<{
   items: TAutoComplete[]
   selected?: TAutoComplete
+}>()
+
+const emit = defineEmits<{
+  (e: 'input', v: string): void
 }>()
 </script>
