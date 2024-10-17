@@ -6,7 +6,7 @@
     <label class="input input-bordered flex items-center gap-2">
       <input
         class="grow"
-        @keydown.enter="emit('event:enter')"
+        v-bind="{ ...$attrs, class: undefined }"
         v-model="value"
         type="text"
         :placeholder="props.placeholder"
@@ -33,9 +33,6 @@ const props = withDefaults(
     emptyUndefined: true,
   },
 )
-const emit = defineEmits<{
-  (e: 'event:enter'): void
-}>()
 
 const { value, errorMessage } = useField(() => props.name)
 
