@@ -3,10 +3,7 @@
     <div v-if="props.labelName" class="label">
       <span class="label-text">{{ props.labelName }}</span>
     </div>
-    <select
-      v-model="value"
-      class="select select-bordered select-sm w-full max-w-xs"
-    >
+    <select v-model="value" class="select select-bordered select-sm w-full">
       <option v-if="props.nullable" :value="undefined">Не выбрано</option>
       <template v-for="item in props.values" :key="item.id">
         <option :value="item.id">
