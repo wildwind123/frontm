@@ -6,7 +6,7 @@
     <select v-model="value" class="select select-bordered select-sm w-full">
       <option v-if="props.nullable" :value="undefined">Не выбрано</option>
       <template v-for="item in props.values" :key="item.id">
-        <option :value="item.id">
+        <option :value="item.id" :disabled="item.disabled">
           {{ item.value }}
         </option>
       </template>
