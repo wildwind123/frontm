@@ -12,7 +12,7 @@
         </div>
       </div>
       <div
-        class="backdrop-blur-sm"
+        class="backdrop-blur-sm overflow-auto"
         :style="{
           height: bodyHeight,
         }"
